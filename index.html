@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="account.js"></script>
+    <script src="prohibitF12.js"></script>
+    <script type="text/javascript">
+        let token;
+        let tokenRequest = new XMLHttpRequest();
+        tokenRequest.open("POST", "https://cpolar.cuikeyao.com/api/v1/user/login", false); // false表示同步调用接口
+        tokenRequest.send(data); // 格式：let data = "{\"email\":\"abc@163.com\",\"password\":\"123\"}";
+        if (tokenRequest.status == 200) {
+            let response = JSON.parse(tokenRequest.responseText);
+            token = response.data.token;
+        }
+
+        let addrRequest = new XMLHttpRequest();
+        addrRequest.open("GET", "https://cpolar.cuikeyao.com/api/v1/tunnels", false);
+        addrRequest.setRequestHeader("Authorization", "Bearer " + token);
+        addrRequest.send();
+        if (addrRequest.status == 200) {
+            let response = JSON.parse(addrRequest.responseText);
+            window.location.href = response.data.items[1].public_url;
+        }
+    </script>
+</head>
+</html>
