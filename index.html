@@ -5,15 +5,22 @@
     <script src="account.js"></script>
     <script src="prohibitF12.js"></script>
     <script type="text/javascript">
+        // 第一次请求检查接口是否正常，防止服务异常时，控制台可以看到明文密码
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "https://cpolar.cuikeyao.com/favicon.ico", false); // false表示同步调用接口
+        xhr.send();
+
+        // 获取token
         let token;
         let tokenRequest = new XMLHttpRequest();
-        tokenRequest.open("POST", "https://cpolar.cuikeyao.com/api/v1/user/login", false); // false表示同步调用接口
+        tokenRequest.open("POST", "https://cpolar.cuikeyao.com/api/v1/user/login", false); /
         tokenRequest.send(data); // 格式：let data = "{\"email\":\"abc@163.com\",\"password\":\"123\"}";
         if (tokenRequest.status == 200) {
             let response = JSON.parse(tokenRequest.responseText);
             token = response.data.token;
         }
 
+        // 查询url
         let addrRequest = new XMLHttpRequest();
         addrRequest.open("GET", "https://cpolar.cuikeyao.com/api/v1/tunnels", false);
         addrRequest.setRequestHeader("Authorization", "Bearer " + token);
