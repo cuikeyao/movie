@@ -1,0 +1,46 @@
+name: 'Update video website address'
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+
+jobs:
+  bot:
+    runs-on: ubuntu-latest
+    env:
+      username: ${{ secrets.USERNAME }}
+      password: ${{ secrets.PASSWORD }}
+      token_url: ${{ secrets.TOKEN_URL }}
+      addr_url: ${{ secrets.ADDR_URL }}
+
+    steps:
+      - name: 'Start'
+        run: echo '=====Start====='
+
+      - name: 'IPv6 test'
+        run: echo `curl 6.ipw.cn`
+
+      - name: 'Checkout codes'
+        uses: actions/checkout@v1
+
+      - name: 'Set up python'
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.8
+
+      - name: 'Install lib'
+        run: pip install requests==2.31.0
+
+      - name: 'Bash'
+        run: bash ./run.sh
+
+      - name: 'Push changes'
+        uses: actions-go/push@v1
+        with:
+          author-name: cuikeyao
+          author-email: 991486302@qq.com
+          commit-message: update address
+          token: ${{ secrets.TOKEN }}
+
+      - name: 'Finish'
+        run: echo '=====Finish====='
